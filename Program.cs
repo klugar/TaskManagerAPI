@@ -39,6 +39,14 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateTaskValidator>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVue", policy =>
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -49,6 +57,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseCors("AllowVue");
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

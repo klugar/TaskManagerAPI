@@ -32,7 +32,7 @@ public class TasksControllerTests
                  .ReturnsAsync(tasks);
 
         // Act
-        var result = await _controller.GetAll(default);
+        var result = await _controller.GetAll(new TaskQueryDto(), default);
 
         // Assert
         var ok = Assert.IsType<OkObjectResult>(result.Result);
